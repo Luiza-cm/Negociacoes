@@ -1,6 +1,7 @@
-import { Negociacao } from "./negociacao";
+import { Modelo } from './../interfaces/modelo.js';
+import { Negociacao } from "./negociacao.js";
 
-export class Negociacoes {
+export class Negociacoes implements Modelo<Negociacoes> {
     private negociacoes: Array<Negociacao> = [];
 
     // obs: declaracao do tipo array pode ser feito de duas formas:
@@ -14,6 +15,14 @@ export class Negociacoes {
     // a: ReadonlyArray<T> OU a: readonly T[]
     public lista(): ReadonlyArray<Negociacao> {
         return this.negociacoes;
+    }
+
+    public paraTexto(): string {
+        return JSON.stringify(this.negociacoes, null, 2);
+    }
+
+    ehIgual(negociacoes: Negociacoes): boolean {
+        return JSON.stringify(this.negociacoes) === JSON.stringify(negociacoes.lista())
     }
 }
 

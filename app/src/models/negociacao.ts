@@ -1,4 +1,6 @@
-export class Negociacao {
+import { Modelo } from './../interfaces/modelo.js';
+
+export class Negociacao implements Modelo<Negociacao> {
     // private data: Date;
     // private quantidade: number;
     // private valor: number;
@@ -19,7 +21,16 @@ export class Negociacao {
 
         // uma alternativa para o modo privado de uma classe eh declara-la
         // como public readonly - assim ninguem podera modifica-la fora do construtor da classe
-    ){}
+    ) {}
+
+    public static createFrom(dataString: string, quantityString: string, valueString: string): Negociacao {
+        const exp = /-/g;
+        const date = new Date(dataString.replace(exp,','));
+        const quantity = parseInt(quantityString);
+        const value = parseFloat(valueString);
+
+        return new Negociacao(date, quantity, value);
+    }
 
     get getData(): Date {
 
@@ -42,13 +53,21 @@ export class Negociacao {
         return this.valor * this.quantidade;
     }
 
-    public static createFrom(dataString: string, quantityString: string, valueString: string): Negociacao {
-        const exp = /-/g;
-        const date = new Date(dataString.replace(exp,','));
-        const quantity = parseInt(quantityString);
-        const value = parseFloat(valueString);
-
-        return new Negociacao(date, quantity, value);
+    public paraTexto(): string {
+        return `
+            Data: ${this.data},
+            Quantidade: ${this.quantidade},
+            Valor: ${this.valor}
+            
+        `;
     }
+
+    public ehIgual(negociacao: Negociacao): boolean {
+        return this.data.getDate() === negociacao.data.getDate()
+            && this.data.getMonth() === negociacao.data.getMonth()
+            && this.data.getFullYear() === negociacao.data.getFullYear();
+    }
+
+    
     
 }
